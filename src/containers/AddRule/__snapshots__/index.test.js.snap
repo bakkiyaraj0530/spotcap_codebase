@@ -1,0 +1,162 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AddRule /> render correctly text component 1`] = `
+<div
+  className="add-rule-main"
+>
+  <header>
+    <h1>
+      ADD RULE FORM 
+    </h1>
+  </header>
+  <nav>
+    <a
+      href="/"
+      onClick={[Function]}
+    >
+      CATEGORY View 
+    </a>
+  </nav>
+  <main>
+    <form
+      onSubmit={[Function]}
+    >
+      <div
+        className="wrapper rule-element"
+      >
+        <label>
+          rule Match Value:
+          <input
+            name="matchvalue"
+            onChange={[Function]}
+            type="text"
+          />
+        </label>
+        <span
+          style={
+            Object {
+              "color": "red",
+            }
+          }
+        />
+      </div>
+      <div
+        className="wrapper rule-element"
+      >
+        <label>
+          rule Match Type:
+          <select
+            name="matchtype"
+            onChange={[Function]}
+          >
+            <option
+              selected={true}
+            >
+              Select Match Type
+            </option>
+            <option
+              value="exact"
+            >
+              Exact
+            </option>
+            <option
+              value="contains"
+            >
+              Contains
+            </option>
+            <option
+              value="startsWith"
+            >
+              Starts with
+            </option>
+            <option
+              value="endsWith"
+            >
+              End With
+            </option>
+            <option
+              value="regex"
+            >
+              Regex
+            </option>
+          </select>
+        </label>
+        <span
+          style={
+            Object {
+              "color": "red",
+            }
+          }
+        />
+      </div>
+      <div
+        className="wrapper rule-element"
+      >
+        <label>
+           rule Flag:
+          <select
+            name="matchflag"
+            onChange={[Function]}
+          >
+            <option
+              selected={true}
+            >
+              Select Flag
+            </option>
+            <option
+              value="Red"
+            >
+              Red
+            </option>
+            <option
+              value="Yellow"
+            >
+              Yellow
+            </option>
+          </select>
+        </label>
+        <span
+          style={
+            Object {
+              "color": "red",
+            }
+          }
+        />
+      </div>
+      <div
+        className="wrapper rule-element"
+      >
+        <label>
+          rule Category:
+          <input
+            name="matchcategory"
+            onChange={[Function]}
+            type="text"
+          />
+        </label>
+        <span
+          style={
+            Object {
+              "color": "red",
+            }
+          }
+        />
+      </div>
+      <div
+        className="wrapper"
+      >
+        <input
+          className="button"
+          type="submit"
+          value="Submit"
+        />
+      </div>
+    </form>
+  </main>
+  <footer>
+    <p>
+       SPOTCAP.com
+    </p>
+  </footer>
+</div>
+`;
