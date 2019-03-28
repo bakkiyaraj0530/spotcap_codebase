@@ -10,21 +10,24 @@ const initialState = {}
 const enhancers = []
 const middleware = [thunk, routerMiddleware(history)]
 
-if (process.env.NODE_ENV === 'development') {
-  const devToolsExtension = window.__REDUX_DEVTOOLS_EXTENSION__
-
-  if (typeof devToolsExtension === 'function') {
-    enhancers.push(devToolsExtension())
-  }
-}
-
 const composedEnhancers = compose(
   applyMiddleware(...middleware),
   ...enhancers
 )
 
-export default createStore(
-  connectRouter(history)(rootReducer),
-  initialState,
-  composedEnhancers
-)
+describe('Create Store ', () => {
+  let store;
+
+  beforeAll(() => {
+    store = createStore(connectRouter(history)(rootReducer),
+      initialState,
+      composedEnhancers);
+  });
+
+  describe('Load store object ', () => {
+    it('should contain an object for async reducers', () => {
+      expect(typeof store).toBe('object');
+    });
+  });
+
+});

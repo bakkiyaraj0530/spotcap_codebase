@@ -5,14 +5,12 @@ const transactions = require('../../json/transactions.json');
 const backarrow = require('./../../img/images.png');
 
 const customRenderer = (tag, size, color) => {
-  // console.log(e)
-  const colors = (tag.value === 'Personal Loan' || tag.value === 'Personal Credit' || tag.value === 'Loan' || tag.value === 'Loans' || tag.value === 'Back Payment' || tag.value === 'Credit' || tag.value === 'Interest') ? 'Yellow' : 'Red';
   return (
     <span key={tag.value} title={tag.value}
       style={{
         animation: 'blinker 3s linear infinite',
         fontSize: '1em',
-        backgroundColor: colors,
+        backgroundColor: color,
         margin: '3px',
         padding: '0px 0px ' + size + 'px 87px',
         display: 'inline-block',
@@ -39,7 +37,8 @@ export default class Tagedetail extends React.Component {
         let filteredObject = {
           'value': item,
           'count': filter(propSatisfies(eqInsensitive(item), 'transactionDescription'), transactions).length,
-          'details': filter(propSatisfies(eqInsensitive(item), 'transactionDescription'), transactions)
+          'details': filter(propSatisfies(eqInsensitive(item), 'transactionDescription'), transactions),
+          'color': this.props.location.state.color,
         }
         return groupbymatch.push(filteredObject);
       })
@@ -64,17 +63,14 @@ export default class Tagedetail extends React.Component {
   * @To display highlited transaction details, like Transanction Id, Transaction Description.
   */
   viewHighlitedtransaction(trxItem, selectedItem) {
-    // debugger;
     const name = document.querySelector(".tag-cloud");
     const nameitems = name.children;
     const array = Array.from(nameitems);
     let borderappend;
     array.forEach(el => {
-      console.log(el.getAttribute('style').indexOf('border'));
       if (el.getAttribute('style').indexOf('border') > -1) {
         el.setAttribute('style', el.getAttribute('style').replace('border: 1px solid #ec5d0a', ''));
         el.setAttribute('style', el.getAttribute('style').replace('border: 1px solid #161615', ''));
-
       }
       if (el.getAttribute('title') === selectedItem) {
          if(el.getAttribute('style').indexOf('red') > -1) {
@@ -98,9 +94,9 @@ export default class Tagedetail extends React.Component {
   * Render method to display the content.
   */
   render() {
-    const txhiglitedDetails = this.state.highlitedItem && this.state.highlitedItem.map((txItem) => {
+    const txhiglitedDetails = this.state.highlitedItem && this.state.highlitedItem.map((txItem, key) => {
       return (
-        <span className="innercontent">[ {txItem.transactionId} ] {`< ${txItem.transactionDescription} >`}</span>
+        <span key={key} className="innercontent">[ {txItem.transactionId} ] {`< ${txItem.transactionDescription} >`}</span>
       );
     });
     return (

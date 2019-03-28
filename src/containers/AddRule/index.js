@@ -1,11 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-
 
 export default class AddRule extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { groupCateg: '', matchvalue: '', matchtype: '', matchflag: '', matchcategory: '', errors: {} };
+    this.state = { success: false, groupCateg: '', matchvalue: '', matchtype: '', matchflag: '', matchcategory: '', errors: {} };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -16,19 +14,7 @@ export default class AddRule extends React.Component {
   }
 
   postData(url = ``, data = {}) {
-    return fetch(url, {
-      method: "POST",
-      mode: "cors", 
-      cache: "no-cache",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      redirect: "follow", // manual, *follow, error
-      referrer: "no-referrer", // no-referrer, *client
-      body: JSON.stringify(data), // body data type must match "Content-Type" header
-    })
-      .then(response => response.json()); // parses JSON response into native Javascript objects 
+    return 
   }
   handleValidation() {
     let errors = {};
@@ -57,11 +43,8 @@ export default class AddRule extends React.Component {
 
 
   handleSubmit(event) {
-    // alert('A name was submitted: ' + this.state.matchtype);
-
     event.preventDefault();
     if (!this.handleValidation()) {
-      alert("Form has errors.");
       return false;
     }
     const newruleData = {
@@ -71,20 +54,39 @@ export default class AddRule extends React.Component {
       ruleCategory: this.state.matchcategory
     };
 
-    const response = this.postData(`/updateRule`, newruleData)
-      .then(data => console.log(JSON.stringify(data)))
-      .catch(error => console.error(error));
-    alert('RULES ADDED SUCCESSFULLY!!');
+     /*
+     * Making Server post api call to update the rules
+     */
+    const response = fetch(`/updateRule`, {
+      method: "POST",
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      redirect: "follow", // manual, *follow, error
+      referrer: "no-referrer", // no-referrer, *client
+      body: JSON.stringify(newruleData), // body data type must match "Content-Type" header
+    })
+      .then(response => response.json()); // parses JSON response into native Javascript objects 
+    console.log('response', response);
+
     this.setState({
       matchvalue: '',
       matchtype: '',
       matchflag: '',
       matchcategory: '',
+      success: true,
     });
 
     this.gotoHome();
   }
 
+   /*
+   * Redirecting page to cateogory view page - pushing history to home.
+   */
+   
   gotoHome() {
     this.props.history.push('/');
   }
@@ -100,10 +102,11 @@ export default class AddRule extends React.Component {
         </nav>
         <main>
           <form onSubmit={this.handleSubmit}>
+            {this.state.success && <div> RULES SUBMITTED SUCCESSFULLY</div>}
             <div className="wrapper rule-element">
               <label>
                 rule Match Value:
-                <input type="text" name="matchvalue" onChange={this.handleChange} />
+                <input ref="matchvalue" type="text"  name="matchvalue" onChange={this.handleChange} />
               </label>
               <span style={{ color: "red" }}>{this.state.errors["matchvalue"]}</span>
             </div>
