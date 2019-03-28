@@ -148,5 +148,11 @@
 		"ruleMatchType": "contains",
 		"ruleFlag": "Red",
 		"ruleCategory": "sdfsdfds"
+	},
+	{
+		"ruleMatchValue": "Bakkiyaraj",
+		"ruleMatchType": "contains",
+		"ruleFlag": "Yellow",
+		"ruleCategory": "Testing"
 	}
 ]

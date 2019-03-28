@@ -1,91 +1,64 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import { TagCloud } from "react-tagcloud";
 import CategoryView from './index';
+
 import renderer from 'react-test-renderer';
 import { browserHistory } from 'react-router';
 import { shallow, mount, render } from 'enzyme';
 import configureStore from 'redux-mock-store';
-import { mapStateToProps, mapDispatchToProps } from './index';
+// import { stub } from 'sinon';
 
-const initialState = {};
+const mockStore = configureStore();
+let wrapper;
+let store;
 
-const createMockStore = (getState) => {
-  const middlewares = [];
-  return configureStore(middlewares)(getState);
+const rulesList = [
+  {
+    "ruleMatchValue": "Interest",
+    "ruleMatchType": "contains",
+    "ruleFlag": "Yellow",
+    "ruleCategory": "Interest"
+  }
+];
+
+const txlist = [
+  {
+    "transactionId": "f8d8acd5-51b7-41eb-8a7c-d4fb5093af97",
+    "transactionDate": "2016-09-08T19:50:40Z",
+    "transactionType": "Deposit",
+    "transactionDescription": "‫test‫ "
+  }
+];
+
+const initialState = {
+  transactions: {
+    transactionsdata: txlist,
+    rulesdata: rulesList
+  }
 };
+beforeEach(() => {
+  //creates the store with any initial state or middleware needed  
+  store = mockStore(initialState);
+  wrapper = mount(<Provider store={store} >
+    <CategoryView /></Provider>);
+})
+describe('Container Login', () => {
+  it('should render the container component', () => {
 
-const mockStore = createMockStore();
-// import { BrowserRouter as Router } from 'react-router-dom';
-
-// it('renders without crashing', () => {
-//   shallow(<Appointment />);
-// });
-// const mockStore = configureStore();
-
-// const mockStore = configureStore();
-
-// describe('<CategoryView /> Render', () => {
-//   it('should display the Transactions grouped Category type', () => {
-
-//     const viewtrx = shallow(<CategoryView transactions={transactions} rules={rules} />);
-//     it('<CategoryView />renders without crashing', () => {
-//       const component = () => viewtrx;
-//       expect(component).not.toThrow();
-//     });
-//     // const CategoryViewo = mount(<Router><CategoryView transactions={transactions} rules={rules} /></Router>);
-//     // let viewtrx = CategoryViewo.toJSON();
-//     // expect(viewtrx).toMatchSnapshot();
-//     // const title = <h3>Team standup meeting</h3>;
-//     // expect(appointment.contains(title)).toEqual(true);
-//   })
-// });
-describe('<CategoryView />', () => {
-  // it('Expect to have unit tests specified---------------', () => {
-  //   expect(true).toEqual(false);
-  // });
-  // it('should render without throwing an error', () => {
-  //   expect(shallow(<CategoryView />).exists(<form className='login'></form>)).toBe(true)
-  //  })
-
-  const counter = {
-    transactionData:
-    {
-      "transactionId": "85600b98-74ce-4751-b844-839d209c4f3a",
-      "transactionDate": "2015-11-05T08:37:42Z",
-      "transactionType": "Withdrawal",
-      "transactionDescription": "test⁠test‫ erat eros"
-    },
-    rulesdata: {
-      "ruleMatchValue": "Penalization",
-      "ruleMatchType": "contains",
-      "ruleFlag": "Red",
-      "ruleCategory": "Penalization"
-    }
-  };
-
-  it('render correctly text component', () => {
-    const TextInputComponent = renderer.create(
-      <Provider store={mockStore}>
-        <CategoryView  />
-      </Provider>
-    ).toJSON();
-    expect(TextInputComponent).toMatchSnapshot();
+    expect(wrapper.find(CategoryView).length).toEqual(1);
+    expect(wrapper.props().store.getState().transactions).toEqual({ transactionsdata: txlist, rulesdata: rulesList });
   });
+});
 
-  // it('should show previously rolled value', () => {
-  //   const initialState = {
-  //     transactionData:
-  //     {
-  //       "transactionId": "85600b98-74ce-4751-b844-839d209c4f3a",
-  //       "transactionDate": "2015-11-05T08:37:42Z",
-  //       "transactionType": "Withdrawal",
-  //       "transactionDescription": "test⁠test‫ erat eros"
-  //     },
-  //   };
-
-    // Just call the method directly passing in sample data
-    // to make sure it does what it's supposed to
-    // expect(mapStateToProps(initialState).transactionData).toEqual(1);
-// });
-
+describe('<CategoryView />', () => {
+  it('Handle Tag On Click Method', () => {
+    expect(wrapper.find(TagCloud)).toHaveLength(1);
+    const details = {
+      transactionId: '23123324',
+      transactionDescription: 'test'
+    };
+    const highlightedItem = 'Loan';
+    wrapper.find(TagCloud).simulate('click', [{ details, highlightedItem }]);
+  });
 });

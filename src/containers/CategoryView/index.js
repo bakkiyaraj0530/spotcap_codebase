@@ -1,37 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { push } from 'connected-react-router';
-// import { Link } from 'react-router-dom';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { TagCloud } from "react-tagcloud";
 import { filter, groupBy, prop, curry, pipe, zipObj, map, pluck, flatten, uniq, toPairs, propSatisfies } from 'ramda'
 import {
-  rulesaction,
-  transactionsaction,
-} from '../../modules/counter'
+  getTransactions,
+  getRules,
+} from './actions';
 
 /*
 * making custom style on each Cloud tag, ie .. Transaction category
 */
 
 const customRenderer = (tag, size, color) => {
-
-  const colors = (tag.value === 'Loans' || tag.value === 'Interest' || tag.value === 'Consumer Loan') ? 'Yellow' : 'Red';
-  // console.log('tag value', tag.value, 'size', size);
   return (
     <span key={tag.value} title={tag.value}
       style={{
         animation: 'blinker 3s linear infinite',
         animationDelay: `${Math.random() * 2}s`,
         fontSize: `1em`,
-        border: `2px solid ${colors}`,
-        backgroundColor: colors,
+        border: `2px solid ${color}`,
+        backgroundColor: color,
         margin: '3px',
         padding: `0px 0px ${size}px 87px`,
         display: 'inline-block',
-        // padding: '0px 0px 35px 87px',
         cursor: 'pointer',
       }}></span>
   )
@@ -44,8 +39,8 @@ class CategoryView extends React.Component {
     this.state = { groupCateg: '' };
   }
   componentWillMount() {
-    this.props.transactionsaction();
-    this.props.rulesaction();
+    this.props.getTransactions();
+    this.props.getRules();
   }
 
   gotoRule() {
@@ -68,19 +63,20 @@ class CategoryView extends React.Component {
 
       if (rulevalue && rulevalue.length > 0) {
         rulevalue.map((item, key) => {
-          const ctegvalue = {
+          const tagvalue = {
             'value': item.ruleCategory,
             'count': filter(propSatisfies(eqInsensitive(item.ruleCategory), 'transactionDescription'), this.props.transactions).length,
-            'match': item.ruleMatchValue
+            'match': item.ruleMatchValue,
+            'color': ((item.ruleCategory === 'Loans' || item.ruleCategory === 'Interest' || item.ruleCategory === 'Consumer Loan') ? 'Yellow' : 'Red')
           }
-          return groupbycategory.push(ctegvalue);
+          return groupbycategory.push(tagvalue);
         })
       }
     } else {
       return 'Loading'
     }
     return (
-      <div class="container">
+      <div className="container">
         <header>
           <h1>TRANSACTION HISTORY BY CATEGORY </h1>
         </header>
@@ -92,7 +88,8 @@ class CategoryView extends React.Component {
             maxSize={35}
             tags={groupbycategory}
             renderer={customRenderer}
-            onClick={tag => this.props.changePage(tag.value, tag.match)}
+            shuffle={true}
+            onClick={tag => this.props.changePage(tag.value, tag.match, tag.color)}
           />
         </main>
         <footer>
@@ -113,19 +110,21 @@ CategoryView.defaultProps = {
   rules: {}
 }
 
-const mapStateToProps = ({ counter }) => ({
-  transactions: counter.transactionsdata,
-  rules: counter.rulesdata,
-})
+function mapStateToProps(state) {
+  return {
+    transactions: state.transactions.transactionsdata || {},
+    rules: state.transactions.rulesdata || {},
+  }
+};
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      transactionsaction,
-      rulesaction,
-      changePage: (tag, match) => push({
+      getTransactions,
+      getRules,
+      changePage: (tag, match, color) => push({
         pathname: '/tagdetail-view',
-        state: { detail: tag, match: match }
+        state: { detail: tag, match: match, color: color }
       }),
     },
     dispatch
@@ -135,3 +134,4 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(CategoryView)
+
