@@ -1,20 +1,16 @@
-<p align="center"><a href="https://medium.com/@notrab/getting-started-with-create-react-app-redux-react-router-redux-thunk-d6a19259f71f"><img src="https://i.imgur.com/PATsTx2.png" title="View tutorial" alt="React, React Router, Redux and Redux Thunk" width="900"></a></p>
 
-* Tutorial: [Getting started with create-react-app, Redux, React Router & Redux Thunk](https://medium.com/@notrab/getting-started-with-create-react-app-redux-react-router-redux-thunk-d6a19259f71f)
-* [Demo](https://create-react-app-redux.now.sh) 🙌
+# spotcap_codebase
+Task code base
 
-## Installation
+#Steps to open a application.
+ 
+1. After fetching the code base, please do npm install in root directory. 
+2. In command propt or terminal, run the npm start command to start the applicaton.
+3. To Update Json file for Adding new rules, you need to start the node server by executing - npm run server - command in separate command prompt / terminal.
+4. To see the test case coverage, please run the npm test -- --coverage - command in a separate terminal / command prompt.
+5. There you the application running in http://localhost:3000/.
 
-```bash
-git clone https://github.com/notrab/create-react-app-redux.git
-cd create-react-app-redux
-yarn
-```
+Thank you.
 
-## Get started
+Please let me know if any queries.
 
-```bash
-yarn start
-```
-
-This boilerplate is built using [create-react-app](https://github.com/facebook/create-react-app) so you will want to read the User Guide for more goodies.
